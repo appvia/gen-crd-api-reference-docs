@@ -680,6 +680,11 @@ func render(w io.Writer, pkgs []*apiPackage, config generatorConfig) error {
 		"isLocalType":      isLocalType,
 		"isOptionalMember": isOptionalMember,
 		"constantsOfType":  func(t *types.Type) []*types.Type { return constantsOfType(t, typePkgMap[t]) },
+		"jsxEscape": func(s string) string {
+			s = strings.ReplaceAll(s, "{{", "{ '{{' }")
+			s = strings.ReplaceAll(s, "}}", "{ '}}' }")
+			return s
+		},
 	}).ParseGlob(filepath.Join(*flTemplateDir, "*.tpl"))
 	if err != nil {
 		return errors.Wrap(err, "parse error")
